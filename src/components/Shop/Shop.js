@@ -6,6 +6,7 @@ import './Shop.css'
 const Shop = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
+    //product to be render on ui
     const [displayProduct, SetDisplayProduct] = useState([]);
     useEffect(() => {
         fetch('./products.JSON')
