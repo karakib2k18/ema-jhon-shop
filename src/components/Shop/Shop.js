@@ -46,7 +46,6 @@ const Shop = () => {
             product.quantity = 1;
             newCart.push(product);
         }
-
         setCart(newCart);
         //save to local storage for now
         addToDb(product.key);
@@ -57,7 +56,7 @@ const Shop = () => {
         const searchText = event.target.value;
         const matchProducts = products.filter(product => product.name.toLowerCase().includes(searchText.toLowerCase()));
         SetDisplayProduct(matchProducts);
-        console.log(matchProducts.length)
+        //console.log(matchProducts.length)
     }
     return (
         <>
