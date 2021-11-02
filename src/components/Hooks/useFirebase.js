@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, getIdToken} from "firebase/auth";
 import firebaseInitAuthentication from "../../Firebase/firebase.init";
 
 firebaseInitAuthentication();
@@ -29,12 +29,19 @@ const useFirebase = () => {
 
     //observe user state changed or not
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
+                getIdToken(user)
+                .then((idToken)=>localStorage.setItem('idToken', idToken))
+                  
                 setUser(user);
                 //setUser(user.uid);
+            }else{
+                setUser({});
             }
+            return ()=> unsubscribe;
         })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return {

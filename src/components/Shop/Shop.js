@@ -2,21 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { addToDb, getStoredCart } from '../../utilities/fakedb';
 import Cart from '../Cart/Cart';
+import useCart from '../Hooks/useCart';
 import Products from '../Products/Products';
 import './Shop.css'
 const Shop = () => {
     const [products, setProducts] = useState([]);
-    const [cart, setCart] = useState([]);
+    // const [cart, setCart] = useState([]);
+    const [cart, setCart] = useCart();
+    const [pageCount, setPageCount] = useState([]);
+    const [page, setPage] = useState(0);
     //product to be render on ui
     const [displayProduct, SetDisplayProduct] = useState([]);
+    const size = 10;
     useEffect(() => {
-        fetch('./products.JSON')
+        fetch(`http://localhost:5000/products?page=${page}&&size=${size}`)
             .then(res => res.json())
             .then(data => {
-                setProducts(data);
-                SetDisplayProduct(data);
+                setProducts(data.products);
+                SetDisplayProduct(data.products);
+                const count = data.count;
+                const pageNumber = Math.ceil(count/size);
+                setPageCount(pageNumber);
             });
-    }, [])
+    }, [page])
 
     useEffect(() => {
         if (products.length) {
@@ -35,7 +43,7 @@ const Shop = () => {
             setCart(storedCart);
         }
 
-    }, [products])
+    }, [])
 
     // const addToCartHandler = (product) => {
     //     //const newCart = [...cart, product];
@@ -94,6 +102,15 @@ const Shop = () => {
 
                         ></Products>)
                     }
+                    <div className="pagination">
+                       {
+                            [...Array(pageCount).keys()].map(number => <button
+                            className={number === page ? 'selected' : ''}
+                            key={number}
+                            onClick={()=> setPage(number)}
+                            >{number+1}</button>  )
+                       }
+                    </div>
                 </div>
                 <div className="cart-container">
                     <Cart cart={cart}>
