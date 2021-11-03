@@ -27,9 +27,9 @@ const Orders = () => {
 
     return (
         <div>
-            <h2>this is Orders {orders.length}</h2>
+            <h2>this is Orders {orders?.length}</h2>
             {
-                orders.map(order => <li>{order.email}</li> )
+                orders?.map(order => <li>{order.email}</li> )
             }
         </div>
     );
